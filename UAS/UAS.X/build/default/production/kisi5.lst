@@ -1,0 +1,663 @@
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000003            00001 STATUS equ 03h ; STATUS merujuk ke alamat memori 03h
+  00000005            00002 PORTA equ 05h ; PORTA merujuk ke alamat memori 05h
+  00000006            00003 PORTB equ 06h ; PORTB merujuk ke alamat memori 06h
+  00000007            00004 PORTC equ 07h ; PORTC merujuk ke alamat memori 07h
+  00000008            00005 PORTD equ 08h
+  00000085            00006 TRISA equ 85h ; TRISA merujuk ke alamat memori 85h
+  00000086            00007 TRISB equ 86h ; TRISB merujuk ke alamat memori 86h
+  00000087            00008 TRISC equ 87h ; TRISC merujuk ke alamat memori 87h
+  00000088            00009 TRISD equ 88h ; TRISE merujuk ke alamat memori 89h
+  0000009F            00010 ADCON1 equ 9Fh ; ADCON1 merujuk ke alamat memori 9Fh
+                      00011  
+                      00012     cblock h'20'
+  00000020            00013     delay_1
+  00000021            00014     delay_2
+                      00015     endc
+                      00016     
+                      00017     org 00                      ; origin register
+                      00018     
+0000   0103           00019         clrw                    ; Clear the working register
+0001   1683           00020         bsf     STATUS,5        ; ke Bank1
+0002   3006           00021         movlw   0x06            ; konfigurasi seluruh PIN
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0003   009F           00022         movwf   ADCON1          ; sebagai digital inputs
+                      00023         
+0004   300F           00024         movlw   0x0F            ;
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0005   0085           00025         movwf   TRISA           ; TRISA bit 4-0 bernilai 1
+                      00026                                 ; menyebabkan PORTA bit 4-0 menjadi INPUT
+0006   3000           00027         movlw   0x00            ; 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0007   0086           00028         movwf   TRISB           ; TRISB seluruh bitnya diberi nilai 0
+                      00029                                 ; menyebabkan Seluruh Pin PORTB menjadi OUTPUT
+0008   3000           00030         movlw   0x00            ; 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0009   0087           00031         movwf   TRISC
+                      00032         
+000A   3000           00033         movlw   0x00            ; 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   0088           00034         movwf   TRISD
+000C   1283           00035         bcf     STATUS,5        ; ke Bank0 (karena PORTA dan PORTB ada di Bank0)
+000D   0185           00036         clrf    PORTA           ; PORTA di-clear 
+000E   0186           00037         clrf    PORTB           ; PORTB di-clear
+000F   0187           00038         clrf    PORTC           ; PORTB di-clear
+0010   0188           00039         clrf    PORTD           ; PORTB di-clear
+                      00040 
+                      00041     
+0011                  00042 loop
+0011   1805           00043         btfsc   PORTA,0         ; Jika RA0 = 0, lompati 1 instruksi.
+0012   2???           00044         call    normal          ; panggil subrutin
+                      00045         
+                      00046         
+0013   1885           00047         btfsc   PORTA,1         ; Jika RA0 = 0, lompati 1 instruksi.
+0014   2???           00048         call    hujan_atas
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00049         
+                      00050         
+0015   1905           00051         btfsc   PORTA,2         ; Jika RA0 = 0, lompati 1 instruksi.
+0016   2???           00052         call    hujan_bawah
+                      00053         
+                      00054         
+0017   1985           00055         btfsc   PORTA,3         ; Jika RA0 = 1, lompati 1 instruksi.
+0018   2???           00056         call    bawah_atas_kiri
+                      00057         
+                      00058         
+0019   1A05           00059         btfsc   PORTA,4             ; Jika RA0 = 1, lompati 1 instruksi.
+001A   2???           00060         call    bawah_atas_kanan    ; panggil subrutin
+001B   0000           00061         nop
+                      00062         
+001C   2???           00063         goto loop
+                      00064         
+001D                  00065 normal
+001D   3000           00066         movlw b'00000000'
+001E   0086           00067         movwf PORTB
+001F   2???           00068         call delay
+                      00069         
+0020   3000           00070         movlw b'00000000'
+0021   0087           00071         movwf PORTC
+0022   2???           00072         call delay
+                      00073         
+0023   3000           00074         movlw b'00000000'
+0024   0088           00075         movwf PORTD
+0025   2???           00076         call delay
+                      00077         
+0026   0008           00078         return
+                      00079         
+                      00080 
+0027                  00081 hujan_atas
+0027   3001           00082         movlw b'00000001' ;Kolom 1 nyala 
+0028   0086           00083         movwf PORTB
+0029   3001           00084         movlw b'00000001' ;Kolom 1 nyala 
+002A   0087           00085         movwf PORTC
+002B   3001           00086         movlw b'00000001' ;Kolom 1 nyala 
+002C   0088           00087         movwf PORTD
+002D   2???           00088         call delay
+                      00089         
+002E   3003           00090         movlw b'00000011' ;Kolom 1 nyala 
+002F   0086           00091         movwf PORTB
+0030   3003           00092         movlw b'00000011' ;Kolom 1 nyala 
+0031   0087           00093         movwf PORTC
+0032   3003           00094         movlw b'00000011' ;Kolom 1 nyala 
+0033   0088           00095         movwf PORTD
+0034   2???           00096         call delay
+                      00097         
+0035   3006           00098         movlw b'00000110' ;Kolom 1 nyala 
+0036   0086           00099         movwf PORTB
+0037   3006           00100         movlw b'00000110' ;Kolom 1 nyala 
+0038   0087           00101         movwf PORTC
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0039   3006           00102         movlw b'00000110' ;Kolom 1 nyala 
+003A   0088           00103         movwf PORTD
+003B   2???           00104         call delay
+                      00105         
+003C   300C           00106         movlw b'00001100' ;kolom 2 nyala
+003D   0086           00107         movwf PORTB
+003E   300C           00108         movlw b'00001100' ;kolom 2 nyala
+003F   0087           00109         movwf PORTC
+0040   300C           00110         movlw b'00001100' ;kolom 2 nyala
+0041   0088           00111         movwf PORTD
+0042   2???           00112         call delay
+                      00113         
+0043   3018           00114         movlw b'00011000' ;kolom 3 nyala
+0044   0086           00115         movwf PORTB
+0045   3018           00116         movlw b'00011000' ;kolom 3 nyala
+0046   0087           00117         movwf PORTC
+0047   3018           00118         movlw b'00011000' ;kolom 3 nyala
+0048   0088           00119         movwf PORTD
+0049   2???           00120         call delay
+                      00121         
+004A   3030           00122         movlw b'00110000' ;Kolom 1 mati
+004B   0086           00123         movwf PORTB
+004C   3030           00124         movlw b'00110000' ;Kolom 1 mati
+004D   0087           00125         movwf PORTC
+004E   3030           00126         movlw b'00110000' ;Kolom 1 mati
+004F   0088           00127         movwf PORTD
+0050   2???           00128         call delay
+                      00129         
+0051   3060           00130         movlw b'01100000' ;Kolom 2 mati
+0052   0086           00131         movwf PORTB
+0053   3060           00132         movlw b'01100000' ;Kolom 2 mati
+0054   0087           00133         movwf PORTC
+0055   3060           00134         movlw b'01100000' ;Kolom 2 mati
+0056   0088           00135         movwf PORTD
+0057   2???           00136         call delay
+                      00137         
+0058   30C0           00138         movlw b'11000000' ;Kolom 3 mati
+0059   0086           00139         movwf PORTB
+005A   30C0           00140         movlw b'11000000' ;Kolom 3 mati
+005B   0087           00141         movwf PORTC
+005C   30C0           00142         movlw b'11000000' ;Kolom 3 mati
+005D   0088           00143         movwf PORTD
+005E   2???           00144         call delay
+                      00145         
+005F   3080           00146         movlw b'10000000' ;Kolom 3 mati
+0060   0086           00147         movwf PORTB
+0061   3080           00148         movlw b'10000000' ;Kolom 3 mati
+0062   0087           00149         movwf PORTC
+0063   3080           00150         movlw b'10000000' ;Kolom 3 mati
+0064   0088           00151         movwf PORTD
+0065   2???           00152         call delay
+                      00153         
+0066   3000           00154         movlw b'00000000' ;Kolom 3 mati
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0067   0086           00155         movwf PORTB
+0068   3000           00156         movlw b'00000000' ;Kolom 3 mati
+0069   0087           00157         movwf PORTC
+006A   3000           00158         movlw b'00000000' ;Kolom 3 mati
+006B   0088           00159         movwf PORTD
+006C   2???           00160         call delay
+006D   0008           00161         return
+                      00162         
+006E                  00163 hujan_bawah
+006E   3080           00164         movlw b'10000000' ;Kolom 3 mati
+006F   0086           00165         movwf PORTB
+0070   3080           00166         movlw b'10000000' ;Kolom 3 mati
+0071   0087           00167         movwf PORTC
+0072   3080           00168         movlw b'10000000' ;Kolom 3 mati
+0073   0088           00169         movwf PORTD
+0074   2???           00170         call delay
+                      00171         
+0075   30C0           00172         movlw b'11000000' ;Kolom 3 mati
+0076   0086           00173         movwf PORTB
+0077   30C0           00174         movlw b'11000000' ;Kolom 3 mati
+0078   0087           00175         movwf PORTC
+0079   30C0           00176         movlw b'11000000' ;Kolom 3 mati
+007A   0088           00177         movwf PORTD
+007B   2???           00178         call delay
+                      00179         
+007C   3060           00180         movlw b'01100000' ;Kolom 3 mati
+007D   0086           00181         movwf PORTB
+007E   3060           00182         movlw b'01100000' ;Kolom 3 mati
+007F   0087           00183         movwf PORTC
+0080   3060           00184         movlw b'01100000' ;Kolom 3 mati
+0081   0088           00185         movwf PORTD
+0082   2???           00186         call delay
+                      00187         
+0083   3030           00188         movlw b'00110000' ;Kolom 2 mati
+0084   0086           00189         movwf PORTB
+0085   3030           00190         movlw b'00110000' ;Kolom 2 mati
+0086   0087           00191         movwf PORTC
+0087   3030           00192         movlw b'00110000' ;Kolom 2 mati
+0088   0088           00193         movwf PORTD
+0089   2???           00194         call delay
+                      00195         
+008A   3018           00196         movlw b'00011000' ;Kolom 1 mati
+008B   0086           00197         movwf PORTB
+008C   3018           00198         movlw b'00011000' ;Kolom 1 mati
+008D   0087           00199         movwf PORTC
+008E   3018           00200         movlw b'00011000' ;Kolom 1 mati
+008F   0088           00201         movwf PORTD
+0090   2???           00202         call delay
+                      00203         
+0091   300C           00204         movlw b'00001100' ;kolom 3 nyala
+0092   0086           00205         movwf PORTB
+0093   300C           00206         movlw b'00001100' ;kolom 3 nyala
+0094   0087           00207         movwf PORTC
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0095   300C           00208         movlw b'00001100' ;kolom 3 nyala
+0096   0088           00209         movwf PORTD
+0097   2???           00210         call delay
+                      00211         
+0098   3006           00212         movlw b'00000110' ;kolom 2 nyala
+0099   0086           00213         movwf PORTB
+009A   3006           00214         movlw b'00000110' ;kolom 2 nyala
+009B   0087           00215         movwf PORTC
+009C   3006           00216         movlw b'00000110' ;kolom 2 nyala
+009D   0088           00217         movwf PORTD
+009E   2???           00218         call delay
+                      00219         
+009F   3003           00220         movlw b'00000011' ;Kolom 1 nyala 
+00A0   0086           00221         movwf PORTB
+00A1   3003           00222         movlw b'00000011' ;Kolom 1 nyala 
+00A2   0087           00223         movwf PORTC
+00A3   3003           00224         movlw b'00000011' ;Kolom 1 nyala 
+00A4   0088           00225         movwf PORTD
+00A5   2???           00226         call delay
+                      00227         
+00A6   3001           00228         movlw b'00000001' ;Kolom 1 nyala 
+00A7   0086           00229         movwf PORTB
+00A8   3001           00230         movlw b'00000001' ;Kolom 1 nyala 
+00A9   0087           00231         movwf PORTC
+00AA   3001           00232         movlw b'00000001' ;Kolom 1 nyala 
+00AB   0088           00233         movwf PORTD
+00AC   2???           00234         call delay
+                      00235         
+00AD   3000           00236         movlw b'00000000' ;Kolom 3 mati
+00AE   0086           00237         movwf PORTB
+00AF   3000           00238         movlw b'00000000' ;Kolom 3 mati
+00B0   0087           00239         movwf PORTC
+00B1   3000           00240         movlw b'00000000' ;Kolom 3 mati
+00B2   0088           00241         movwf PORTD
+00B3   2???           00242         call delay
+                      00243         
+00B4   0008           00244         return
+                      00245         
+00B5                  00246 bawah_atas_kiri
+                      00247         ;kolom 1
+00B5   3080           00248         movlw b'10000000' ;Kolom 1 bawah ke atas 8
+00B6   0086           00249         movwf PORTB
+00B7   2???           00250         call delay
+                      00251         
+00B8   3040           00252         movlw b'01000000' ;Kolom 1 bawah ke atas 7
+00B9   0086           00253         movwf PORTB
+00BA   2???           00254         call delay
+                      00255         
+00BB   3020           00256         movlw b'00100000' ;Kolom 1 bawah ke atas 6
+00BC   0086           00257         movwf PORTB
+00BD   2???           00258         call delay
+                      00259         
+00BE   3010           00260         movlw b'00010000' ;Kolom 1 bawah ke atas 5
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00BF   0086           00261         movwf PORTB
+00C0   2???           00262         call delay
+                      00263         
+00C1   3008           00264         movlw b'00001000' ;Kolom 1 bawah ke atas 4
+00C2   0086           00265         movwf PORTB
+00C3   2???           00266         call delay
+                      00267         
+00C4   3004           00268         movlw b'00000100' ;Kolom 1 bawah ke atas 3
+00C5   0086           00269         movwf PORTB
+00C6   2???           00270         call delay
+                      00271         
+00C7   3002           00272         movlw b'00000010' ;Kolom 1 bawah ke atas 2
+00C8   0086           00273         movwf PORTB
+00C9   2???           00274         call delay
+                      00275         
+00CA   3001           00276         movlw b'00000001' ;Kolom 1 bawah ke atas 1
+00CB   0086           00277         movwf PORTB
+00CC   2???           00278         call delay
+                      00279         
+00CD   3000           00280         movlw b'00000000' ;Kolom 1 bawah ke atas mati
+00CE   0086           00281         movwf PORTB
+00CF   2???           00282         call delay
+                      00283         
+                      00284         ;kolom 2
+00D0   3001           00285         movlw b'00000001' ;Kolom 2 atas ke bawah 1
+00D1   0087           00286         movwf PORTC
+00D2   2???           00287         call delay
+                      00288         
+00D3   3002           00289         movlw b'00000010' ;Kolom 2 atas ke bawah 2
+00D4   0087           00290         movwf PORTC
+00D5   2???           00291         call delay
+                      00292         
+00D6   3004           00293         movlw b'00000100' ;Kolom 2 atas ke bawah 3
+00D7   0087           00294         movwf PORTC
+00D8   2???           00295         call delay
+                      00296         
+00D9   3008           00297         movlw b'00001000' ;Kolom 2 atas ke bawah 4
+00DA   0087           00298         movwf PORTC
+00DB   2???           00299         call delay
+                      00300         
+00DC   3010           00301         movlw b'00010000' ;Kolom 2 atas ke bawah 5
+00DD   0087           00302         movwf PORTC
+00DE   2???           00303         call delay
+                      00304         
+00DF   3020           00305         movlw b'00100000' ;Kolom 2 atas ke bawah 6
+00E0   0087           00306         movwf PORTC
+00E1   2???           00307         call delay
+                      00308         
+00E2   3040           00309         movlw b'01000000' ;Kolom 2 atas ke bawah 7
+00E3   0087           00310         movwf PORTC
+00E4   2???           00311         call delay
+                      00312         
+00E5   3080           00313         movlw b'10000000' ;Kolom 2 atas ke bawah 8
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00E6   0087           00314         movwf PORTC
+00E7   2???           00315         call delay
+                      00316         
+00E8   3000           00317         movlw b'00000000' ;Kolom 2 atas ke bawah mati
+00E9   0087           00318         movwf PORTC
+00EA   2???           00319         call delay
+                      00320         
+                      00321         ;kolom 3
+00EB   3080           00322         movlw b'10000000' ;Kolom 3 bawah ke atas 8
+00EC   0088           00323         movwf PORTD
+00ED   2???           00324         call delay
+                      00325         
+00EE   3040           00326         movlw b'01000000' ;Kolom 3 bawah ke atas 7
+00EF   0088           00327         movwf PORTD
+00F0   2???           00328         call delay
+                      00329         
+00F1   3020           00330         movlw b'00100000' ;Kolom 3 bawah ke atas 6
+00F2   0088           00331         movwf PORTD
+00F3   2???           00332         call delay
+                      00333         
+00F4   3010           00334         movlw b'00010000' ;Kolom 3 bawah ke atas 5
+00F5   0088           00335         movwf PORTD
+00F6   2???           00336         call delay
+                      00337         
+00F7   3008           00338         movlw b'00001000' ;Kolom 3 bawah ke atas 4
+00F8   0088           00339         movwf PORTD
+00F9   2???           00340         call delay
+                      00341         
+00FA   3004           00342         movlw b'00000100' ;Kolom 3 bawah ke atas 3
+00FB   0088           00343         movwf PORTD
+00FC   2???           00344         call delay
+                      00345         
+00FD   3002           00346         movlw b'00000010' ;Kolom 3 bawah ke atas 2
+00FE   0088           00347         movwf PORTD
+00FF   2???           00348         call delay
+                      00349         
+0100   3001           00350         movlw b'00000001' ;Kolom 3 bawah ke atas 1
+0101   0088           00351         movwf PORTD
+0102   2???           00352         call delay
+                      00353         
+0103   3000           00354         movlw b'00000000' ;Kolom 3 bawah ke atas mati
+0104   0088           00355         movwf PORTD
+0105   2???           00356         call delay
+                      00357         
+                      00358         ;kolom 2 terakhir
+0106   3001           00359         movlw b'00000001' ;Kolom 2 atas ke bawah 1
+0107   0087           00360         movwf PORTC
+0108   2???           00361         call delay
+                      00362         
+0109   3002           00363         movlw b'00000010' ;Kolom 2 atas ke bawah 2
+010A   0087           00364         movwf PORTC
+010B   2???           00365         call delay
+                      00366         
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+010C   3004           00367         movlw b'00000100' ;Kolom 2 atas ke bawah 3
+010D   0087           00368         movwf PORTC
+010E   2???           00369         call delay
+                      00370         
+010F   3008           00371         movlw b'00001000' ;Kolom 2 atas ke bawah 4
+0110   0087           00372         movwf PORTC
+0111   2???           00373         call delay
+                      00374         
+0112   3010           00375         movlw b'00010000' ;Kolom 2 atas ke bawah 5
+0113   0087           00376         movwf PORTC
+0114   2???           00377         call delay
+                      00378         
+0115   3020           00379         movlw b'00100000' ;Kolom 2 atas ke bawah 6
+0116   0087           00380         movwf PORTC
+0117   2???           00381         call delay
+                      00382         
+0118   3040           00383         movlw b'01000000' ;Kolom 2 atas ke bawah 7
+0119   0087           00384         movwf PORTC
+011A   2???           00385         call delay
+                      00386         
+011B   3080           00387         movlw b'10000000' ;Kolom 2 atas ke bawah 8
+011C   0087           00388         movwf PORTC
+011D   2???           00389         call delay
+                      00390         
+011E   3000           00391         movlw b'00000000' ;Kolom 2 atas ke bawah mati
+011F   0087           00392         movwf PORTC
+0120   2???           00393         call delay
+0121   0008           00394         return
+                      00395         
+0122                  00396 bawah_atas_kanan
+                      00397         ;kolom 3 bawah
+0122   3080           00398         movlw b'10000000' ;Kolom 3 bawah ke atas 8
+0123   0088           00399         movwf PORTD
+0124   2???           00400         call delay
+                      00401         
+0125   3040           00402         movlw b'01000000' ;Kolom 3 bawah ke atas 7
+0126   0088           00403         movwf PORTD
+0127   2???           00404         call delay
+                      00405         
+0128   3020           00406         movlw b'00100000' ;Kolom 3 bawah ke atas 6
+0129   0088           00407         movwf PORTD
+012A   2???           00408         call delay
+                      00409         
+012B   3010           00410         movlw b'00010000' ;Kolom 3 bawah ke atas 5
+012C   0088           00411         movwf PORTD
+012D   2???           00412         call delay
+                      00413         
+012E   3008           00414         movlw b'00001000' ;Kolom 3 bawah ke atas 4
+012F   0088           00415         movwf PORTD
+0130   2???           00416         call delay
+                      00417         
+0131   3004           00418         movlw b'00000100' ;Kolom 3 bawah ke atas 3
+0132   0088           00419         movwf PORTD
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0133   2???           00420         call delay
+                      00421         
+0134   3002           00422         movlw b'00000010' ;Kolom 3 bawah ke atas 2
+0135   0088           00423         movwf PORTD
+0136   2???           00424         call delay
+                      00425         
+0137   3001           00426         movlw b'00000001' ;Kolom 3 bawah ke atas 1
+0138   0088           00427         movwf PORTD
+0139   2???           00428         call delay
+                      00429         
+013A   3000           00430         movlw b'00000000' ;Kolom 3 bawah ke atas mati
+013B   0088           00431         movwf PORTD
+013C   2???           00432         call delay
+                      00433         
+                      00434         ;kolom 2 atas
+013D   3001           00435         movlw b'00000001' ;Kolom 2 atas ke bawah 1
+013E   0087           00436         movwf PORTC
+013F   2???           00437         call delay
+                      00438         
+0140   3002           00439         movlw b'00000010' ;Kolom 2 atas ke bawah 2
+0141   0087           00440         movwf PORTC
+0142   2???           00441         call delay
+                      00442         
+0143   3004           00443         movlw b'00000100' ;Kolom 2 atas ke bawah 3
+0144   0087           00444         movwf PORTC
+0145   2???           00445         call delay
+                      00446         
+0146   3008           00447         movlw b'00001000' ;Kolom 2 atas ke bawah 4
+0147   0087           00448         movwf PORTC
+0148   2???           00449         call delay
+                      00450         
+0149   3010           00451         movlw b'00010000' ;Kolom 2 atas ke bawah 5
+014A   0087           00452         movwf PORTC
+014B   2???           00453         call delay
+                      00454         
+014C   3020           00455         movlw b'00100000' ;Kolom 2 atas ke bawah 6
+014D   0087           00456         movwf PORTC
+014E   2???           00457         call delay
+                      00458         
+014F   3040           00459         movlw b'01000000' ;Kolom 2 atas ke bawah 7
+0150   0087           00460         movwf PORTC
+0151   2???           00461         call delay
+                      00462         
+0152   3080           00463         movlw b'10000000' ;Kolom 2 atas ke bawah 8
+0153   0087           00464         movwf PORTC
+0154   2???           00465         call delay
+                      00466         
+0155   3000           00467         movlw b'00000000' ;Kolom 2 atas ke bawah mati
+0156   0087           00468         movwf PORTC
+0157   2???           00469         call delay
+                      00470         
+                      00471         ;kolom 1 bawah
+0158   3080           00472         movlw b'10000000' ;Kolom 1 bawah ke atas 8
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0159   0086           00473         movwf PORTB
+015A   2???           00474         call delay
+                      00475         
+015B   3040           00476         movlw b'01000000' ;Kolom 1 bawah ke atas 7
+015C   0086           00477         movwf PORTB
+015D   2???           00478         call delay
+                      00479         
+015E   3020           00480         movlw b'00100000' ;Kolom 1 bawah ke atas 6
+015F   0086           00481         movwf PORTB
+0160   2???           00482         call delay
+                      00483         
+0161   3010           00484         movlw b'00010000' ;Kolom 1 bawah ke atas 5
+0162   0086           00485         movwf PORTB
+0163   2???           00486         call delay
+                      00487         
+0164   3008           00488         movlw b'00001000' ;Kolom 1 bawah ke atas 4
+0165   0086           00489         movwf PORTB
+0166   2???           00490         call delay
+                      00491         
+0167   3004           00492         movlw b'00000100' ;Kolom 1 bawah ke atas 3
+0168   0086           00493         movwf PORTB
+0169   2???           00494         call delay
+                      00495         
+016A   3002           00496         movlw b'00000010' ;Kolom 1 bawah ke atas 2
+016B   0086           00497         movwf PORTB
+016C   2???           00498         call delay
+                      00499         
+016D   3001           00500         movlw b'00000001' ;Kolom 1 bawah ke atas 1
+016E   0086           00501         movwf PORTB
+016F   2???           00502         call delay
+                      00503         
+0170   3000           00504         movlw b'00000000' ;Kolom 1 bawah ke atas mati
+0171   0086           00505         movwf PORTB
+0172   2???           00506         call delay
+                      00507         
+                      00508         ;kolom 2 atas terakhir
+0173   3001           00509         movlw b'00000001' ;Kolom 2 atas ke bawah 1
+0174   0087           00510         movwf PORTC
+0175   2???           00511         call delay
+                      00512         
+0176   3002           00513         movlw b'00000010' ;Kolom 2 atas ke bawah 2
+0177   0087           00514         movwf PORTC
+0178   2???           00515         call delay
+                      00516         
+0179   3004           00517         movlw b'00000100' ;Kolom 2 atas ke bawah 3
+017A   0087           00518         movwf PORTC
+017B   2???           00519         call delay
+                      00520         
+017C   3008           00521         movlw b'00001000' ;Kolom 2 atas ke bawah 4
+017D   0087           00522         movwf PORTC
+017E   2???           00523         call delay
+                      00524         
+017F   3010           00525         movlw b'00010000' ;Kolom 2 atas ke bawah 5
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0180   0087           00526         movwf PORTC
+0181   2???           00527         call delay
+                      00528         
+0182   3020           00529         movlw b'00100000' ;Kolom 2 atas ke bawah 6
+0183   0087           00530         movwf PORTC
+0184   2???           00531         call delay
+                      00532         
+0185   3040           00533         movlw b'01000000' ;Kolom 2 atas ke bawah 7
+0186   0087           00534         movwf PORTC
+0187   2???           00535         call delay
+                      00536         
+0188   3080           00537         movlw b'10000000' ;Kolom 2 atas ke bawah 8
+0189   0087           00538         movwf PORTC
+018A   2???           00539         call delay
+                      00540         
+018B   3000           00541         movlw b'00000000' ;Kolom 2 atas ke bawah mati
+018C   0087           00542         movwf PORTC
+018D   2???           00543         call delay
+                      00544         
+018E   0008           00545         return
+                      00546                 
+018F                  00547 delay
+018F   30FF           00548         movlw   d'255'          ; isi w-reg dengan desimal 255 (nilai maksimal 255)
+                      00549                                 ; menentukan waktu delay.
+0190   00A0           00550         movwf   delay_1         ; isi memori delay_1 dengan nilai w-reg
+0191   00A1           00551         movwf   delay_2         ; isi memori delay_2 dengan nilai w-reg
+0192                  00552 delay_loop
+0192   0BA0           00553         decfsz  delay_1, f      ; delay_1 = delay_1 ? 1, jika delay_1 = 0 maka lompat
+0193   2???           00554             goto delay_loop     ; kembali kurangi delay_1
+0194   0BA1           00555         decfsz  delay_2, f      ; delay_2 = delay_2 ? 1, jika delay_2 = 0 maka lompat
+0195   2???           00556             goto delay_loop     ; kembali kurangi delay_2
+0196   0008           00557         return
+                      00558 
+                      00559         end
+MPASM 5.83                         KISI5.ASM   7-21-2020  11:55:58         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCON1                            0000009F
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+STATUS                            00000003
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+__16F877A                         00000001
+bawah_atas_kanan                  00000122
+bawah_atas_kiri                   000000B5
+delay                             0000018F
+delay_1                           00000020
+delay_2                           00000021
+delay_loop                        00000192
+hujan_atas                        00000027
+hujan_bawah                       0000006E
+loop                              00000011
+normal                            0000001D
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
+
+

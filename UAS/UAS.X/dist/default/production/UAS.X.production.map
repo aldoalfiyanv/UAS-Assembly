@@ -1,0 +1,46 @@
+MPLINK 5.09, LINKER
+Linker Map File - Created Tue Jul 21 11:56:27 2020
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x00032e
+                   .cinit    romdata   0x000197    program   0x000004
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000198      
+            409 out of 8454 program addresses used, program memory utilization is 4%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+         bawah_atas_kanan   0x000122    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+          bawah_atas_kiri   0x0000b5    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+                    delay   0x00018f    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+               delay_loop   0x000192    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+               hujan_atas   0x000027    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+              hujan_bawah   0x00006e    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+                     loop   0x000011    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+                   normal   0x00001d    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     loop   0x000011    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+                   normal   0x00001d    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+               hujan_atas   0x000027    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+              hujan_bawah   0x00006e    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+          bawah_atas_kiri   0x0000b5    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+         bawah_atas_kanan   0x000122    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+                    delay   0x00018f    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+               delay_loop   0x000192    program     static G:\Kuliah\Bahasa Assembly\UAS\UAS.X\kisi5.asm
+
+
